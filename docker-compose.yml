@@ -1,0 +1,31 @@
+# docker compose 버전 지정
+version: '3'
+services:
+  react:
+    build:
+      # source 참조 어디서 하는지. 루트폴더 지정.
+      context: .
+      # 사용할 dockerfile
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    # 로컬 머신에 있는 파일들 맵핑
+    volumes:
+      # 첫번쨰: 제외해줄 폴더 지정
+      - /usr/src/app/node_modules
+      # 맵핑 시킬 폴더 지정. 현재폴더:컨테이너폴더
+      - ./:/usr/src/app
+    # 리액트 앱 끌때 필요 (버그 수정)
+    stdin_open: true
+  # for test
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      # 첫번쨰: 제외해줄 폴더 지정
+      - /usr/src/app/node_modules
+      # 맵핑 시킬 폴더 지정. 현재폴더:컨테이너폴더
+      - ./:/usr/src/app
+    # 리액트 앱 끌때 필요 (버그 수정)
+    command: ['npm', 'run', 'test']
